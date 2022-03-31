@@ -7,7 +7,6 @@
 <div class="row">
   <div class="col-sm-12">
     <app-recipe-item
-      (recipeSelected)="changeRecipe($event)"
       *ngFor="let recipeEl of recipes"
       [recipe]="recipeEl"
     ></app-recipe-item>
