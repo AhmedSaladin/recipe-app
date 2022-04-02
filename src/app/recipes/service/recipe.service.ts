@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingService } from 'src/app/shopping-list/service/shopping.service';
 import { Recipe } from '../recipe.model';
@@ -7,7 +8,6 @@ import { Recipe } from '../recipe.model';
   providedIn: 'root',
 })
 export class RecipeService {
-  private recipeSelected = new EventEmitter<Recipe>();
   private recipes: Array<Recipe> = [
     new Recipe(
       'Tasty Schnitzel',
@@ -23,22 +23,12 @@ export class RecipeService {
     ),
   ];
 
+  Recipes = new BehaviorSubject(this.recipes);
+
   constructor(private shoppingService: ShoppingService) {}
 
   addNewRecipe(recipe: Recipe) {
-    this.recipes.push(recipe);
-  }
-
-  getAllRecipes() {
-    return this.recipes;
-  }
-
-  getRecipe() {
-    return this.recipeSelected;
-  }
-
-  setSingleRecipe(recipe?: Recipe) {
-    this.recipeSelected.emit(recipe);
+    this.Recipes.next([...this.Recipes.value, recipe]);
   }
 
   addIngredientsToShoppingList(ingredients?: Array<Ingredient>) {

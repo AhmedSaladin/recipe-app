@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 
 @Injectable({
@@ -9,13 +10,13 @@ export class ShoppingService {
     new Ingredient('Apples', 5),
     new Ingredient('Bananas', 7),
   ];
+
+  Ingredients = new BehaviorSubject(this.ingredients);
   constructor() {}
 
-  getIngredients() {
-    return this.ingredients;
-  }
+
 
   addNewIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
+    this.Ingredients.next([...this.Ingredients.value, ingredient]);
   }
 }
