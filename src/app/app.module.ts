@@ -11,6 +11,7 @@ import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-ed
 import { HeaderComponent } from './header/header.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { CustomDropdownDirective } from './shared/custom-dropdown.directive';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { CustomDropdownDirective } from './shared/custom-dropdown.directive';
     RecipesComponent,
     CustomDropdownDirective,
   ],
-  imports: [BrowserModule, NgbModule],
+  imports: [BrowserModule, NgbModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
 })
