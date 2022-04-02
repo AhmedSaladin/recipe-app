@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ShoppingService } from 'src/app/shopping-list/service/shopping.service';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../service/recipe.service';
 
@@ -13,5 +14,9 @@ export class RecipeDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.recipeService.getRecipe().subscribe((data) => (this.recipe = data));
+  }
+
+  addToShoppingList() {
+    this.recipeService.addIngredientsToShoppingList(this.recipe?.ingredients);
   }
 }
