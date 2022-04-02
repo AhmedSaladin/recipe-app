@@ -46,4 +46,8 @@ export class RecipeService {
       this.shoppingService.addNewIngredient(ingredient)
     );
   }
+
+  getRecipeById(index: number) {
+    return this.recipes[index];
+  }
 }
