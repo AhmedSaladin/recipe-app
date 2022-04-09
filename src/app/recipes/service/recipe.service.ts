@@ -28,7 +28,8 @@ export class RecipeService {
   constructor(private shoppingService: ShoppingService) {}
 
   addNewRecipe(recipe: Recipe) {
-    this.Recipes.next([...this.Recipes.value, recipe]);
+    this.recipes.push(recipe);
+    this.Recipes.next(this.recipes);
   }
 
   addIngredientsToShoppingList(ingredients?: Array<Ingredient>) {
@@ -39,5 +40,14 @@ export class RecipeService {
 
   getRecipeById(index: number) {
     return this.recipes[index];
+  }
+
+  updateRecipe(index: number, recipe: Recipe) {
+    this.recipes[index] = recipe;
+  }
+
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.Recipes.next(this.recipes);
   }
 }
