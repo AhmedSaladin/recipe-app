@@ -10,7 +10,7 @@ export class Recipe {
     name: string,
     desc: string,
     img: string,
-    ingredients: Array<Ingredient>
+    ingredients: Array<Ingredient> = []
   ) {
     this.name = name;
     this.description = desc;
