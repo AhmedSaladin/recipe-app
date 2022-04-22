@@ -32,6 +32,7 @@
             class="nav-link"
             routerLink="shopping-list"
             routerLinkActive="active"
+            *ngIf="isAuthenticated"
             >Shopping List</a
           >
         </li>
@@ -64,7 +65,9 @@
           </a>
         </li>
         <li>
-          <a class="nav-link pointer" *ngIf="isAuthenticated"  (click)="logout()" >Logout</a>
+          <a class="nav-link pointer" *ngIf="isAuthenticated" (click)="logout()"
+            >Logout</a
+          >
         </li>
         <ul
           ngbDropdownMenu
