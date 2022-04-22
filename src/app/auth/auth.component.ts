@@ -50,7 +50,7 @@ export class AuthComponent implements OnInit {
       },
       (error) => {
         this.isLoading = false;
-        this.error = error.message;
+        this.error = error;
       }
     );
   }
