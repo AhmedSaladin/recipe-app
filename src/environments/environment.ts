@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   BASE_URL: 'https://recipe-book-fa3cf-default-rtdb.firebaseio.com/',
+  AUTH: 'https://identitytoolkit.googleapis.com/v1',
+  KEY: 'AIzaSyA88naOzVXcNs5WwWSQ-BOw3He4OwuQ3o4',
 };
 
 /*
