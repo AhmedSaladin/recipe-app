@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from '../shared/user';
+import { Login } from '../shared/user';
 import { AuthService } from './service/auth.service';
 
 @Component({
@@ -33,13 +33,13 @@ export class AuthComponent implements OnInit {
 
   onSubmit() {
     const form = this.authForm.value;
-    const user = new User(form.email, form.password);
+    const user = new Login(form.email, form.password);
     this.isLoading = true;
     if (this.isLoginMode) this.login(user);
     else this.signUp(user);
   }
 
-  login(user: User) {
+  login(user: Login) {
     this.authService.login(user).subscribe({
       next: (data) => {
         this.isLoading = false;
@@ -51,7 +51,7 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  signUp(user: User) {
+  signUp(user: Login) {
     this.authService.signUp(user).subscribe({
       next: (data) => {
         this.isLoading = false;

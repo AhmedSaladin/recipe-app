@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { responseData } from 'src/app/shared/responseData';
-import { User } from 'src/app/shared/user';
+import { Login } from 'src/app/shared/user';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  signUp(user: User) {
+  signUp(user: Login) {
     return this.http
       .post<responseData>(`${this.url}/accounts:signUp?key=${this.key}`, {
         ...user,
@@ -23,7 +23,7 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
-  login(user: User) {
+  login(user: Login) {
     return this.http
       .post<responseData>(
         `${this.url}/accounts:signInWithPassword?key=${this.key}`,
