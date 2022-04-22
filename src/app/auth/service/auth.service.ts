@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private url = environment.AUTH;
   private key = environment.KEY;
-
+  private tokenExpirationTimer!: any;
   user = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -51,14 +51,28 @@ export class AuthService {
     if (!data) return;
 
     const { email, id, _token, _tokenExpirationDate } = JSON.parse(data);
-    const user = new User(email, id, _token, _tokenExpirationDate);
-    if (user.token) this.user.next(user);
-    
+    const user = new User(email, id, _token, new Date(_tokenExpirationDate));
+    if (user.token) {
+      this.user.next(user);
+      const expirationDuration =
+        new Date(_tokenExpirationDate).getTime() - new Date().getTime();
+      this.autoLogOut(expirationDuration);
+    }
+  }
+
+  private autoLogOut(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(
+      () => this.logOut(),
+      expirationDuration
+    );
   }
 
   logOut() {
     this.user.next(null);
+    localStorage.removeItem('user');
     this.router.navigate(['auth']);
+    if (this.tokenExpirationTimer) clearTimeout(this.tokenExpirationTimer);
+    this.tokenExpirationTimer = null;
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -86,10 +100,9 @@ export class AuthService {
   private handleAuthentication(resData: responseData) {
     // + +resData.expiresIn cast string into number
     // *1000 because expiresIn in seconds and getTime return milliseconds
-    const expirationDate = new Date(
-      new Date().getTime() + +resData.expiresIn * 1000
-    );
-    console.log(resData);
+    const expiresIn = +resData.expiresIn * 1000;
+    const expirationDate = new Date(new Date().getTime() + expiresIn);
+
     const user = new User(
       resData.email,
       resData.localId,
@@ -99,5 +112,6 @@ export class AuthService {
 
     this.user.next(user);
     localStorage.setItem('user', JSON.stringify(user));
+    this.autoLogOut(expiresIn);
   }
 }
