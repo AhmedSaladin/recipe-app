@@ -40,18 +40,26 @@ export class AuthComponent implements OnInit {
   }
 
   login(user: User) {
-    console.log(user);
+    this.authService.login(user).subscribe({
+      next: (data) => {
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.error = error;
+      },
+    });
   }
 
   signUp(user: User) {
-    this.authService.signUp(user).subscribe(
-      (data) => {
+    this.authService.signUp(user).subscribe({
+      next: (data) => {
         this.isLoading = false;
       },
-      (error) => {
+      error: (error) => {
         this.isLoading = false;
         this.error = error;
-      }
-    );
+      },
+    });
   }
 }

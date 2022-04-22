@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { responseData } from 'src/app/shared/responseData';
@@ -20,26 +20,37 @@ export class AuthService {
         ...user,
         returnSecureToken: true,
       })
-      .pipe(
-        catchError((response) => {
-          let error = 'Something went wrong, try again later.';
-          if (!response.error || !response.error.error)
-            return throwError(error);
-
-          switch (response.error.error.message) {
-            case 'EMAIL_EXISTS':
-              error = 'Email already signed up.';
-          }
-
-          return throwError(error);
-        })
-      );
+      .pipe(catchError(this.handleError));
   }
 
   login(user: User) {
-    return this.http.post(
-      `${this.url}/accounts:signInWithPassword?key=${this.key}`,
-      user
-    );
+    return this.http
+      .post<responseData>(
+        `${this.url}/accounts:signInWithPassword?key=${this.key}`,
+        user
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(errorRes: HttpErrorResponse) {
+    let error = 'Something went wrong, try again later.';
+    if (!errorRes.error || !errorRes.error.error)
+      return throwError(() => error);
+
+    switch (errorRes.error.error.message) {
+      case 'EMAIL_NOT_FOUND':
+        error = 'Email not registered yet.';
+        break;
+
+      case 'INVALID_PASSWORD':
+        error = 'The password is invalid or email is not valid.';
+        break;
+
+      case 'EMAIL_EXISTS':
+        error = 'Email already signed up.';
+        break;
+    }
+
+    return throwError(() => error);
   }
 }
