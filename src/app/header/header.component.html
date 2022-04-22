@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink=" ">Recipe Book</a>
+    <a class="navbar-brand" routerLink="/">Recipe Book</a>
 
     <button
       class="navbar-toggler"
@@ -22,6 +22,7 @@
             aria-current="page"
             routerLink="recipes"
             routerLinkActive="active"
+            *ngIf="isAuthenticated"
             >Recipes</a
           >
         </li>
@@ -35,7 +36,11 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="auth" routerLinkActive="active"
+          <a
+            class="nav-link"
+            routerLink="auth"
+            routerLinkActive="active"
+            *ngIf="!isAuthenticated"
             >Authenticate</a
           >
         </li>
@@ -46,15 +51,21 @@
         display="dynamic"
         placement="bottom-end"
       >
-        <a
-          class="nav-link"
-          tabindex="0"
-          ngbDropdownToggle
-          id="navbarDropdown3"
-          role="button"
-        >
-          Manage
-        </a>
+        <li>
+          <a
+            class="nav-link"
+            tabindex="0"
+            ngbDropdownToggle
+            id="navbarDropdown3"
+            role="button"
+            *ngIf="isAuthenticated"
+          >
+            Manage
+          </a>
+        </li>
+        <li>
+          <a class="nav-link pointer" *ngIf="isAuthenticated">Logout</a>
+        </li>
         <ul
           ngbDropdownMenu
           aria-labelledby="navbarDropdown3"

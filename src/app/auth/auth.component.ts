@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Login } from '../shared/user';
+import { Router } from '@angular/router';
+import { RequestBody } from '../shared/user';
 import { AuthService } from './service/auth.service';
 
 @Component({
@@ -14,7 +15,11 @@ export class AuthComponent implements OnInit {
   isLoading = false;
   error!: string;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -33,33 +38,33 @@ export class AuthComponent implements OnInit {
 
   onSubmit() {
     const form = this.authForm.value;
-    const user = new Login(form.email, form.password);
+    const user = new RequestBody(form.email, form.password);
     this.isLoading = true;
     if (this.isLoginMode) this.login(user);
     else this.signUp(user);
   }
 
-  login(user: Login) {
+  login(user: RequestBody) {
     this.authService.login(user).subscribe({
-      next: (data) => {
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.error = error;
-      },
+      next: this.onSuccess.bind(this),
+      error: this.onError.bind(this),
     });
   }
 
-  signUp(user: Login) {
+  signUp(user: RequestBody) {
     this.authService.signUp(user).subscribe({
-      next: (data) => {
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.error = error;
-      },
+      next: this.onSuccess.bind(this),
+      error: this.onError.bind(this),
     });
+  }
+
+  private onError(error: any) {
+    this.isLoading = false;
+    this.error = error;
+  }
+
+  private onSuccess() {
+    this.isLoading = false;
+    this.router.navigate(['/recipes']);
   }
 }

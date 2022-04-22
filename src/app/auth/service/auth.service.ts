@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { responseData } from 'src/app/shared/responseData';
-import { Login } from 'src/app/shared/user';
+import { RequestBody } from 'src/app/shared/user';
 import { User } from 'src/app/shared/user.model';
 import { environment } from 'src/environments/environment';
 
@@ -17,22 +17,28 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  signUp(user: Login) {
+  signUp(user: RequestBody) {
     return this.http
       .post<responseData>(`${this.url}/accounts:signUp?key=${this.key}`, {
         ...user,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError), tap(this.handleAuthentication));
+      .pipe(
+        catchError(this.handleError),
+        tap(this.handleAuthentication.bind(this))
+      );
   }
 
-  login(user: Login) {
+  login(user: RequestBody) {
     return this.http
       .post<responseData>(
         `${this.url}/accounts:signInWithPassword?key=${this.key}`,
         user
       )
-      .pipe(catchError(this.handleError), tap(this.handleAuthentication));
+      .pipe(
+        catchError(this.handleError),
+        tap(this.handleAuthentication.bind(this))
+      );
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -46,7 +52,7 @@ export class AuthService {
         break;
 
       case 'INVALID_PASSWORD':
-        error = 'The password is invalid or email is not valid.';
+        error = 'The password is invalid or email is invalid.';
         break;
 
       case 'EMAIL_EXISTS':

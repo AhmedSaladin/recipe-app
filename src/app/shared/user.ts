@@ -1,3 +1,3 @@
-export class Login {
+export class RequestBody {
   constructor(public email: string, public password: string) {}
 }

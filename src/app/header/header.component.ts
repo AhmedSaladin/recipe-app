@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth/service/auth.service';
 import { RecipeService } from '../recipes/service/recipe.service';
 
 @Component({
@@ -7,9 +9,21 @@ import { RecipeService } from '../recipes/service/recipe.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(private recipeService: RecipeService) {}
+  isAuthenticated = false;
+  sub!: Subscription;
 
-  ngOnInit(): void {}
+  constructor(
+    private recipeService: RecipeService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.sub = this.authService.user.subscribe({
+      next: (user) => {
+        this.isAuthenticated = !!user;
+      },
+    });
+  }
 
   onSaveData() {
     this.recipeService.storeRecipes();
