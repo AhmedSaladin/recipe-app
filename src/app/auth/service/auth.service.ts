@@ -1,8 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { responseData } from 'src/app/shared/responseData';
 import { Login } from 'src/app/shared/user';
+import { User } from 'src/app/shared/user.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,6 +13,7 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   private url = environment.AUTH;
   private key = environment.KEY;
+  user = new Subject<User>();
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +23,7 @@ export class AuthService {
         ...user,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError), tap(this.handleAuthentication));
   }
 
   login(user: Login) {
@@ -29,7 +32,7 @@ export class AuthService {
         `${this.url}/accounts:signInWithPassword?key=${this.key}`,
         user
       )
-      .pipe(catchError(this.handleError));
+      .pipe(catchError(this.handleError), tap(this.handleAuthentication));
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -52,5 +55,22 @@ export class AuthService {
     }
 
     return throwError(() => error);
+  }
+
+  private handleAuthentication(resData: responseData) {
+    // + +resData.expiresIn cast string into number
+    // *1000 because expiresIn in seconds and getTime return milliseconds
+    const expirationDate = new Date(
+      new Date().getTime() + +resData.expiresIn * 1000
+    );
+
+    const user = new User(
+      resData.email,
+      resData.localId,
+      resData.idToken,
+      expirationDate
+    );
+
+    this.user.next(user);
   }
 }
