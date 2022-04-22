@@ -64,7 +64,7 @@
           </a>
         </li>
         <li>
-          <a class="nav-link pointer" *ngIf="isAuthenticated">Logout</a>
+          <a class="nav-link pointer" *ngIf="isAuthenticated"  (click)="logout()" >Logout</a>
         </li>
         <ul
           ngbDropdownMenu
