@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, exhaustMap, take } from 'rxjs';
-import { Ingredient } from 'src/app/shared/ingredient.model';
+import { Ingredient } from 'src/app/shared/models/ingredient.model';
+import { Recipe } from 'src/app/shared//models/recipe.model';
 import { ShoppingService } from 'src/app/shopping-list/service/shopping.service';
-import { Recipe } from '../recipe.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

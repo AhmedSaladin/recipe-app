@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { responseData } from 'src/app/shared/responseData';
-import { RequestBody } from 'src/app/shared/user';
-import { User } from 'src/app/shared/user.model';
+import { responseData } from 'src/app/shared/models/responseData';
+import { RequestBody } from 'src/app/shared/models/user';
+import { User } from 'src/app/shared/models/user.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
