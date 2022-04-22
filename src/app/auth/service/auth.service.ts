@@ -35,12 +35,25 @@ export class AuthService {
     return this.http
       .post<responseData>(
         `${this.url}/accounts:signInWithPassword?key=${this.key}`,
-        user
+        {
+          ...user,
+          returnSecureToken: true,
+        }
       )
       .pipe(
         catchError(this.handleError),
         tap(this.handleAuthentication.bind(this))
       );
+  }
+
+  autoLogin() {
+    const data = localStorage.getItem('user');
+    if (!data) return;
+
+    const { email, id, _token, _tokenExpirationDate } = JSON.parse(data);
+    const user = new User(email, id, _token, _tokenExpirationDate);
+    if (user.token) this.user.next(user);
+    
   }
 
   logOut() {
@@ -76,7 +89,7 @@ export class AuthService {
     const expirationDate = new Date(
       new Date().getTime() + +resData.expiresIn * 1000
     );
-
+    console.log(resData);
     const user = new User(
       resData.email,
       resData.localId,
@@ -85,5 +98,6 @@ export class AuthService {
     );
 
     this.user.next(user);
+    localStorage.setItem('user', JSON.stringify(user));
   }
 }
