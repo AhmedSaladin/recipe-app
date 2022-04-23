@@ -8,8 +8,6 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app.routing';
 import { AuthInterceptorService } from './auth/service/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
-import { ShoppingModule } from './shopping-list/shopping.module';
-import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -19,8 +17,6 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    ShoppingModule,
-    AuthModule,
   ],
   providers: [
     {

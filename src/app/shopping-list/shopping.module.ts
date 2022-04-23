@@ -8,7 +8,7 @@ import { ShoppingListComponent } from './components/shopping-list.component';
 
 const routes: Routes = [
   {
-    path: 'shopping-list',
+    path: '',
     canActivate: [AuthGuard],
     component: ShoppingListComponent,
   },
