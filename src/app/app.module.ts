@@ -7,24 +7,23 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from './app.routing';
-import { AuthComponent } from './auth/auth.component';
 import { AuthInterceptorService } from './auth/service/auth-interceptor.service';
 import { RecipeModule } from './recipes/recipes.module';
 import { SharedModule } from './shared/shared.module';
 import { ShoppingModule } from './shopping-list/shopping.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, AuthComponent],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
     NgbModule,
     AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     RecipeModule,
     SharedModule,
     ShoppingModule,
+    AuthModule,
   ],
   providers: [
     {
